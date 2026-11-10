@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="theme-color" content="#173b79">\n<meta name="description" content="Mimi : exercices interactifs de CE2 en Côte d’Ivoire, avec progression et fonctionnement hors connexion.">\n<link rel="manifest" href="./manifest.json">\n<link rel="apple-touch-icon" href="./icons/icon-192.png">\n<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mimi · Exercices CE2</title>
+
+<style>
+:root{--bg:#fdfdf8;--grid:#d3e2f6;--ink:#1d2f6f;--card:#fff;--mut:#55608a;--or:#d96a00;--gr:#1a7f45;--bl:#2b4fbf;--rd:#d6336c;--ok:#e3f5ea;--ko:#fde8e6;--okb:#1a7f45;--kob:#c0392b;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141a33;--grid:#242e5c;--ink:#eef1ff;--card:#1e2650;--mut:#b0b9e3;--or:#ffa04d;--gr:#4cd08a;--bl:#8aa5ff;--rd:#ff7aa6;--ok:#17402b;--ko:#4a1f24;--okb:#4cd08a;--kob:#ff8a7d;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#141a33;--grid:#242e5c;--ink:#eef1ff;--card:#1e2650;--mut:#b0b9e3;--or:#ffa04d;--gr:#4cd08a;--bl:#8aa5ff;--rd:#ff7aa6;--ok:#17402b;--ko:#4a1f24;--okb:#4cd08a;--kob:#ff8a7d;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;min-height:100%;font-family:"Baloo 2","Trebuchet MS",Verdana,sans-serif;font-weight:500;color:var(--ink);background-color:var(--bg);
+background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:30px 30px;font-size:19px;line-height:1.35}
+body::after{content:"";position:fixed;top:0;bottom:0;left:34px;width:2px;background:var(--rd);opacity:.45;pointer-events:none}
+.flag{height:10px;background:linear-gradient(90deg,#f77f00 33.3%,#fff 33.3% 66.6%,#009e60 66.6%)}
+main{max-width:640px;margin:0 auto;padding:20px 18px 40px 50px}
+h1,h2,h3{font-weight:700;margin:0}
+h1{font-size:2.3rem;line-height:1.05}
+.date{margin:0 0 4px;color:var(--mut);display:inline-block;border-bottom:3px double var(--rd);padding-bottom:2px}
+.sub{color:var(--mut);margin:8px 0 18px}
+.stars{display:inline-block;background:var(--card);border:2px solid var(--ink);border-radius:999px;padding:2px 14px;font-weight:700}
+.list{display:grid;gap:12px;margin-top:20px}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid var(--bl);outline-offset:2px}
+.card,.big,.th,.ch button{background:var(--card);border:2px solid var(--ink);border-radius:14px}
+.big{display:grid;grid-template-columns:auto 1fr;column-gap:14px;text-align:left;padding:14px 16px;border-left:12px solid var(--c);min-height:76px;align-items:center}
+.big .em{grid-row:span 2;font-size:2.1rem}
+.big b{font-size:1.3rem}.big small{color:var(--mut);font-size:.82rem;line-height:1.2}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-top:16px}
+.th{padding:12px;text-align:left;min-height:96px;display:flex;flex-direction:column;justify-content:space-between;border-top:8px solid var(--c)}
+.th b{font-size:1.05rem;line-height:1.15}.th span:first-child{font-size:1.5rem}.th i{font-style:normal;color:var(--or);letter-spacing:2px}
+.back{background:none;border:0;padding:6px 0;color:var(--mut);font-weight:700;min-height:44px}
+.bar{height:12px;background:var(--card);border:2px solid var(--ink);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--c);transition:width .4s}
+.cnt{margin:6px 0 12px;color:var(--mut);font-size:.9rem}
+.card{padding:18px}
+.card h2{font-size:1.45rem;line-height:1.25}
+.ch{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.ch button{min-height:56px;padding:8px 10px;font-size:1.15rem;font-weight:700}
+.ch button.ok{background:var(--ok);border-color:var(--okb)}
+.ch button.ko{background:var(--ko);border-color:var(--kob)}
+.ch button:disabled{cursor:default}
+#fb{margin-top:14px;min-height:30px;font-weight:700}
+.go{margin-top:12px;background:var(--c);color:#fff;border:2px solid var(--ink);border-radius:12px;padding:10px 22px;font-weight:700;min-height:48px}
+.go.alt{background:var(--card);color:var(--ink)}
+.res{text-align:center}
+.res .st{font-size:3rem;letter-spacing:6px;color:var(--or)}
+.row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+@media(max-width:420px){body::after{left:20px}main{padding-left:34px}.ch{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.bar i{transition:none}}
+
+/* Interface modernisée : tableau de bord Mimi */
+.hero{background:linear-gradient(135deg,#173b79,#315ec5 58%,#6c8ce8);color:#fff;padding:22px;border-radius:22px;box-shadow:0 12px 28px #193b7924;position:relative;overflow:hidden}
+.hero:after{content:"✦";position:absolute;right:20px;top:38px;font-size:6rem;opacity:.12}
+.hero .date{color:#e4eaff;border-color:#ffb36b}.hero h1{font-size:2.15rem}.hero .sub{color:#e8edff;max-width:390px}
+.hero-top,.hero-bottom{display:flex;align-items:center;justify-content:space-between;gap:10px}.mini-logo{width:38px;height:38px;border-radius:13px;background:#fff;color:#21458d;display:grid;place-items:center;font-size:1.5rem;font-weight:700}.tag{font-size:.67rem;letter-spacing:1px;font-weight:700;color:#e4eaff}.hero .stars{background:#fff;color:#173b79;border:0}.hero-note{font-size:.8rem;color:#e5ebff}
+.dash{margin-top:18px;background:var(--card);border:1px solid var(--grid);border-radius:20px;padding:17px;box-shadow:0 8px 22px #1d2f6f0c}
+.dash-head,.section-title{display:flex;justify-content:space-between;align-items:center;gap:12px}.dash-head small,.section-title small{font-size:.68rem;letter-spacing:1.2px;color:var(--mut);font-weight:700}.dash-head h2,.section-title h2{font-size:1.35rem}.dash-icon{font-size:1.8rem}
+.stats-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:14px}.stat{background:var(--bg);border:1px solid var(--grid);border-radius:14px;padding:11px;display:grid;grid-template-columns:auto 1fr;column-gap:9px;align-items:center}.stat span{grid-row:span 2;font-size:1.35rem}.stat b{font-size:1.35rem;line-height:1.1}.stat small{font-size:.72rem;color:var(--mut)}
+.overall{margin-top:15px}.overall>div:first-child{display:flex;justify-content:space-between;gap:8px;font-size:.82rem;margin-bottom:7px}.overall strong{color:var(--or)}
+.section-title{margin:22px 0 4px}.section-title>span{font-size:1.4rem}
+.big{border-radius:17px;box-shadow:0 4px 12px #1d2f6f0b;transition:transform .15s,box-shadow .15s}.big:active,.th:active{transform:scale(.985)}.big small{max-width:100%}.subject-count{grid-column:2;color:var(--c);font-size:.78rem;font-weight:700}
+.th{border-radius:16px;box-shadow:0 4px 12px #1d2f6f0b}.th i{font-size:1.1rem}
+.app-footer{text-align:center;color:var(--mut);font-size:.75rem;margin-top:28px}.app-footer span{display:block;font-size:.68rem}
+.card{box-shadow:0 8px 22px #1d2f6f10;border-radius:18px}.ch button{border-radius:12px}.bar{border:0;background:var(--grid);height:10px}
+@media(min-width:700px){main{max-width:850px;padding-left:40px}.stats-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.list{grid-template-columns:repeat(3,minmax(0,1fr))}.hero{padding:28px}.hero h1{font-size:2.7rem}}
+\n</style>
+</head>
+<body>
+<div class="flag"></div>
+<main id="app"></main>
+<script>
+const $=document.getElementById("app");
+const R=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+const sh=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=R(0,i);[a[i],a[j]]=[a[j],a[i]]}return a};
+const pick=a=>a[R(0,a.length-1)];
+const fmt=n=>String(n).replace(/\B(?=(\d{3})+(?!\d))/g,"\u202f");
+const nc=(v,u="")=>{const s=new Set([v]);for(const x of sh([1,2,5,10,-1,-2,-5,-10,20,100,-100])){if(s.size>=4)break;if(v+x>=0)s.add(v+x)}while(s.size<4)s.add(v+R(11,40));return sh([...s]).map(x=>fmt(x)+u)};
+const P=(q,v,u="")=>({q,ok:fmt(v)+u,c:nc(v,u)});
+const conv=i=>({q:i[0],ok:i[1],c:sh([i[1],...i[2]])});
+const who=()=>pick([["Aya","Elle"],["Awa","Elle"],["Kouadio","Il"],["Yao","Il"],["Fatou","Elle"],["Koffi","Il"]]);
+
+const GB=[["Combien de côtés a un triangle ?","3",["2","4","5"]],["Combien de côtés a un carré ?","4",["3","5","6"]],["Combien de côtés a un rectangle ?","4",["2","3","6"]],["Quelle figure a tous ses côtés égaux et 4 angles droits ?","le carré",["le triangle","le rond","le rectangle long"]],["Quelle figure n’a aucun côté droit ?","le cercle",["le carré","le triangle","le rectangle"]],["Combien d’angles droits a un rectangle ?","4",["2","0","3"]]];
+
+const T=[
+{s:"m",id:"add",t:"Additions",e:"➕",g:()=>{const a=R(120,699),b=R(100,399);return P(`${a} + ${b} = ?`,a+b)}},
+{s:"m",id:"sous",t:"Soustractions",e:"➖",g:()=>{const a=R(300,999),b=R(100,a-60);return P(`${a} − ${b} = ?`,a-b)}},
+{s:"m",id:"mult",t:"Tables de multiplication",e:"✖️",g:()=>{const a=R(2,10),b=R(2,10);return P(`${a} × ${b} = ?`,a*b)}},
+{s:"m",id:"div",t:"Divisions simples",e:"➗",g:()=>{const a=R(2,10),b=R(2,10);return P(`${a*b} ÷ ${a} = ?`,b)}},
+{s:"m",id:"val",t:"Unités, dizaines, centaines",e:"🔟",g:()=>{const n=R(1000,9999),d=String(n),p=R(0,3),nm=["des unités","des dizaines","des centaines","des milliers"][p],a=d[3-p];const o=sh([0,1,2,3,4,5,6,7,8,9].filter(x=>String(x)!==a)).slice(0,3).map(String);return{q:`Dans ${fmt(n)}, quel est le chiffre ${nm} ?`,ok:a,c:sh([a,...o])}}},
+{s:"m",id:"suite",t:"Suite et ordre des nombres",e:"🔢",g:()=>{const t=R(0,3),x=R(101,998);if(t==0)return P(`Quel nombre vient juste après ${x} ?`,x+1);if(t==1)return P(`Quel nombre vient juste avant ${x} ?`,x-1);const s=new Set();while(s.size<4)s.add(R(100,999));const a=[...s],m=t==2?Math.max(...a):Math.min(...a);return{q:`Quel est le ${t==2?"plus grand":"plus petit"} nombre ?`,ok:String(m),c:sh(a.map(String))}}},
+{s:"m",id:"fcfa",t:"La monnaie (FCFA)",e:"💰",g:()=>{const [n,p]=who(),l=p.toLowerCase(),it=sh(["un cahier","un stylo","un jus","un pain","une mangue","un sachet de bonbons"]),a=R(2,12)*25,b=R(2,12)*25;if(R(0,1))return P(`${n} achète ${it[0]} à ${a} FCFA et ${it[1]} à ${b} FCFA. Combien ${n} paie-t-${l} en tout ?`,a+b," FCFA");return P(`${n} achète ${it[0]} à ${a} FCFA. ${p} paie avec 500 FCFA. Combien lui rend-on ?`,500-a," FCFA")}},
+{s:"m",id:"prob",t:"Petits problèmes",e:"🧩",g:()=>{const [n,p]=who(),l=p.toLowerCase(),t=R(0,2);if(t==0){const a=R(50,300),b=R(20,150);return P(`${n} a ${a} billes. ${p} en gagne ${b}. Combien de billes ${n} a-t-${l} maintenant ?`,a+b)}if(t==1){const a=R(100,400),b=R(20,90);return P(`${n} a ${a} billes. ${p} en perd ${b}. Combien de billes lui reste-t-il ?`,a-b)}const a=R(2,9),b=R(2,9);return P(`${n} range ${a} sachets de ${b} bonbons chacun. Combien de bonbons y a-t-il en tout ?`,a*b)}},
+{s:"m",id:"geom",t:"Géométrie et périmètre",e:"📐",g:()=>{const t=R(0,3);if(t==0){const c=R(2,12);return P(`Un carré a un côté de ${c} cm. Quel est son périmètre ?`,4*c," cm")}if(t==1){const L=R(5,15),l=R(2,L-1);return P(`Un rectangle mesure ${L} cm de long et ${l} cm de large. Quel est son périmètre ?`,2*(L+l)," cm")}return conv(pick(GB))}},
+{s:"m",id:"mes",t:"Mesures et temps",e:"📏",b:[["1 mètre, c’est combien de centimètres ?","100 cm",["10 cm","1 000 cm","50 cm"]],["1 kilogramme, c’est combien de grammes ?","1 000 g",["100 g","10 g","500 g"]],["1 heure, c’est combien de minutes ?","60 minutes",["30 minutes","100 minutes","24 minutes"]],["1 jour, c’est combien d’heures ?","24 heures",["12 heures","60 heures","10 heures"]],["1 semaine, c’est combien de jours ?","7 jours",["5 jours","6 jours","10 jours"]],["1 année, c’est combien de mois ?","12 mois",["10 mois","52 mois","7 mois"]],["1 kilomètre, c’est combien de mètres ?","1 000 m",["100 m","10 m","500 m"]],["Quel instrument mesure la longueur ?","la règle",["la balance","le thermomètre","l’horloge"]],["Quel instrument mesure la masse ?","la balance",["la règle","le thermomètre","le verre doseur"]],["Quel instrument mesure la température ?","le thermomètre",["la balance","la règle","l’horloge"]]]},
+
+{s:"f",id:"gram",t:"Grammaire : nature des mots",e:"📖",b:[["Dans « Le chat dort », quel mot est un verbe ?","dort",["chat","Le","aucun"]],["Quel mot est un nom : mangue, joli, courir ?","mangue",["joli","courir","vite"]],["Quel mot est un adjectif : grand, table, chanter ?","grand",["table","chanter","hier"]],["Dans « une mangue », quelle est la nature de « une » ?","un déterminant",["un verbe","un nom","un adjectif"]],["Dans « Elle chante », quelle est la nature de « Elle » ?","un pronom",["un verbe","un nom","un déterminant"]],["Quelle phrase est bien écrite ?","Aya mange une mangue.",["aya mange une mangue","Aya mange une mangue","aya Mange une mangue."]],["Quel mot est un verbe : jouer, rouge, école ?","jouer",["rouge","école","petit"]],["Dans « Le grand arbre », quel mot est un adjectif ?","grand",["Le","arbre","aucun"]],["Une phrase se termine toujours par…","un point (ou ! ou ?)",["une virgule","une lettre","un tiret"]],["Quel mot est un nom propre ?","Abidjan",["ville","grande","visiter"]]]},
+{s:"f",id:"conj",t:"Conjugaison",e:"🕰️",b:[["Nous (chanter) au présent :","nous chantons",["nous chantez","nous chantent","nous chante"]],["Ils (finir) au présent :","ils finissent",["ils finit","ils finissons","ils finisent"]],["Tu (avoir) au présent :","tu as",["tu a","tu ai","tu avons"]],["Je (être) au présent :","je suis",["je es","je est","je sommes"]],["Demain, je (manger) :","je mangerai",["je mange","je mangeais","j’ai mangé"]],["Hier, Aya a (manger) :","mangé",["manger","mange","mangez"]],["Ils (aller) au présent :","ils vont",["ils vas","ils allons","ils vais"]],["Vous (dire) au présent :","vous dites",["vous disez","vous disent","vous dis"]],["Elle (jouer) au présent :","elle joue",["elle jouent","elle jouons","elle jouer"]],["Quelle phrase est au futur ?","Demain, nous irons au marché.",["Hier, nous sommes allés au marché.","Aujourd’hui, nous allons au marché.","Nous allions au marché."]]]},
+{s:"f",id:"ortho",t:"Orthographe : a/à, et/est, on/ont…",e:"✍️",b:[["Mimi ___ un livre.","a",["à","as","ah"]],["Je vais ___ l’école.","à",["a","as","ah"]],["Papa ___ maman sont là.","et",["est","ai","é"]],["Le ciel ___ bleu.","est",["et","es","ai"]],["Ils ___ contents.","sont",["son","sons","sonts"]],["Voici ___ cahier.","son",["sont","sons","somme"]],["Les enfants ___ des bonbons.","ont",["on","ons","ant"]],["___ joue au ballon.","On",["Ont","Ons","Un"]],["___ chien aboie.","Ce",["Se","Ses","Ceux"]],["Il ___ lave les mains.","se",["ce","ses","ceux"]]]},
+{s:"f",id:"plur",t:"Pluriel des noms",e:"🔤",b:[["Le pluriel de « un cheval » :","des chevaux",["des chevals","des chevaus","des cheval"]],["Le pluriel de « un animal » :","des animaux",["des animals","des animaus","des animales"]],["Le pluriel de « un gâteau » :","des gâteaux",["des gâteaus","des gâteau","des gâteauxs"]],["Le pluriel de « une fleur » :","des fleurs",["des fleur","des fleurx","des fleures"]],["Le pluriel de « un bijou » :","des bijoux",["des bijous","des bijou","des bijoues"]],["Le singulier de « les oiseaux » :","un oiseau",["un oiseaux","une oiseau","un oiseaus"]],["Quelle phrase est correcte ?","Les filles chantent.",["Les filles chante.","Les fille chantent.","Le filles chantent."]],["Le pluriel de « un journal » :","des journaux",["des journals","des journaus","des journales"]]]},
+{s:"f",id:"sens",t:"Contraires et synonymes",e:"🔁",b:[["Le contraire de « grand » :","petit",["gros","long","haut"]],["Le contraire de « chaud » :","froid",["tiède","sec","doux"]],["Le contraire de « lourd » :","léger",["gros","épais","dur"]],["Le contraire de « content » :","triste",["joyeux","fort","calme"]],["Un synonyme de « joli » :","beau",["laid","vite","petit"]],["Un synonyme de « commencer » :","débuter",["finir","courir","partir"]],["Le contraire de « monter » :","descendre",["sauter","grimper","avancer"]],["Le contraire de « ouvrir » :","fermer",["casser","tirer","pousser"]],["Le contraire de « jour » :","nuit",["soir","matin","midi"]],["Un synonyme de « rapide » :","vite",["lent","doux","long"]]]},
+
+{s:"v",id:"sci",t:"Sciences : corps et nature",e:"🔬",b:[["Quel organe sert à respirer ?","les poumons",["le cœur","l’estomac","le cerveau"]],["Combien de sens avons-nous ?","5",["3","4","7"]],["Que faut-il donner à une plante pour qu’elle vive ?","de l’eau et de la lumière",["du sucre","du sel","du plastique"]],["Quel animal est un mammifère ?","l’éléphant",["le poisson","le poulet","le crocodile"]],["Quelle partie de la plante est sous la terre ?","la racine",["la feuille","la fleur","la tige"]],["Pourquoi se laver les mains ?","pour chasser les microbes",["pour les colorer","pour les chauffer","pour rien"]],["Le soleil se lève à…","l’est",["l’ouest","le nord","le sud"]],["Quel organe pompe le sang ?","le cœur",["les poumons","le foie","l’oreille"]],["Quel sens utilise-t-on avec les yeux ?","la vue",["l’ouïe","le goût","l’odorat"]],["L’eau devient de la glace quand elle…","gèle",["bout","s’évapore","brûle"]]]},
+{s:"v",id:"edhc",t:"Vivre ensemble et Côte d’Ivoire",e:"🇨🇮",b:[["Quelles sont les couleurs du drapeau ivoirien ?","orange, blanc, vert",["rouge, jaune, vert","bleu, blanc, rouge","noir, jaune, rouge"]],["Quelle est la capitale politique de la Côte d’Ivoire ?","Yamoussoukro",["Abidjan","Bouaké","San-Pédro"]],["Quelle est la capitale économique de la Côte d’Ivoire ?","Abidjan",["Yamoussoukro","Korhogo","Daloa"]],["Quelle est la langue officielle de la Côte d’Ivoire ?","le français",["l’anglais","le baoulé","l’arabe"]],["Quand fête-t-on l’indépendance de la Côte d’Ivoire ?","le 7 août",["le 1er mai","le 25 décembre","le 1er janvier"]],["Quelle est la monnaie de la Côte d’Ivoire ?","le franc CFA",["l’euro","le dollar","le cedi"]],["Où jette-t-on les déchets ?","à la poubelle",["dans la rue","dans la rivière","par terre"]],["Où traverse-t-on la route ?","sur le passage piéton",["n’importe où","derrière un camion","en courant"]],["Que fait un bon élève avec son camarade ?","il le respecte",["il se moque de lui","il le frappe","il l’ignore"]],["Que fait-on quand un camarade est triste ?","on le console",["on rit","on part","on crie"]]]},
+{s:"v",id:"geo",t:"Géographie de la Côte d’Ivoire",e:"🗺️",b:[["Quel océan borde la Côte d’Ivoire au sud ?","l’océan Atlantique",["l’océan Indien","l’océan Pacifique","la mer Rouge"]],["Quel pays est à l’est de la Côte d’Ivoire ?","le Ghana",["le Mali","la Guinée","le Libéria"]],["Quel pays est au nord de la Côte d’Ivoire ?","le Burkina Faso",["le Ghana","le Libéria","le Nigeria"]],["Quel est le grand fleuve qui traverse la Côte d’Ivoire ?","le Bandama",["le Nil","le Congo","la Seine"]],["Sur une carte, le nord est…","en haut",["en bas","à gauche","partout"]],["Quel point cardinal est à l’opposé du nord ?","le sud",["l’est","l’ouest","le centre"]],["Combien y a-t-il de points cardinaux ?","4",["2","3","6"]],["Quel pays est à l’ouest de la Côte d’Ivoire ?","le Libéria",["le Ghana","le Burkina Faso","le Togo"]]]}
+];
+
+// Banque complémentaire : questions supplémentaires adaptées au CE2.
+const EXTRA = {
+mes: [
+["2 mètres, c’est combien de centimètres ?","200 cm",["20 cm","100 cm","2 000 cm"]],
+["3 kilogrammes, c’est combien de grammes ?","3 000 g",["300 g","30 g","300 000 g"]],
+["90 minutes, c’est combien d’heures et de minutes ?","1 h 30 min",["1 h","2 h 30 min","90 h"]],
+["Une demi-heure correspond à…","30 minutes",["15 minutes","45 minutes","60 minutes"]],
+["Combien de jours y a-t-il dans 2 semaines ?","14 jours",["12 jours","10 jours","21 jours"]],
+["4 kilomètres, c’est combien de mètres ?","4 000 m",["400 m","40 m","40 000 m"]],
+["Quel instrument sert à mesurer une durée ?","le chronomètre",["la règle","la balance","le thermomètre"]],
+["Une bouteille contient 1 litre. Deux bouteilles contiennent…","2 litres",["1 litre","3 litres","10 litres"]],
+["Combien de mois y a-t-il dans 2 années ?","24 mois",["12 mois","20 mois","10 mois"]],
+["Le mois qui vient après avril est…","mai",["mars","juin","août"]],
+["Le mois qui vient avant janvier est…","décembre",["novembre","février","octobre"]],
+["Un quart d’heure correspond à…","15 minutes",["10 minutes","20 minutes","30 minutes"]],
+["La masse d’un sac de riz se mesure avec…","une balance",["une règle","une horloge","un mètre"]],
+["La longueur d’une salle se mesure en…","mètres",["litres","kilogrammes","heures"]],
+["Il est 8 h. Deux heures plus tard, il sera…","10 h",["9 h","11 h","12 h"]]
+],
+gram: [
+["Dans « Les élèves travaillent », quel est le sujet ?","Les élèves",["travaillent","Les","élèves travaillent"]],
+["Dans « Le petit chien aboie », quel est le nom ?","chien",["petit","aboie","Le"]],
+["Quel mot est un adjectif qualificatif ?","gentil",["courir","maison","demain"]],
+["Dans « Nous jouons », quel est le pronom personnel ?","Nous",["jouons","aucun","jeux"]],
+["Quel mot est un déterminant ?","cette",["courir","rapidement","beau"]],
+["Dans « La maîtresse explique », quel est le verbe ?","explique",["maîtresse","La","classe"]],
+["Quel est le nom propre dans cette phrase : « Awa habite à Bouaké » ?","Awa",["habite","à","ville"]],
+["Quel mot désigne une personne ?","médecin",["table","soleil","courir"]],
+["Dans « un joli jardin », quel mot accompagne le nom ?","un",["jardin","joli","aucun"]],
+["Quel est le féminin de « un voisin » ?","une voisine",["une vois ine","un voisine","des voisins"]],
+["Quel est le masculin de « une vendeuse » ?","un vendeur",["une vendeur","un vendeuse","des vendeuses"]],
+["Dans « Il court vite », quel mot indique comment il court ?","vite",["Il","court","aucun"]],
+["Quel mot est un verbe ?","grandir",["grand","grandeur","grandement"]],
+["Quel est le sujet de « Le soleil brille » ?","Le soleil",["brille","soleil brille","Le"]],
+["Une phrase interrogative sert à…","poser une question",["donner un ordre","raconter seulement","exprimer une joie"]]
+],
+conj: [
+["Je (parler) au présent :","je parle",["je parles","je parlons","je parler"]],
+["Nous (être) au présent :","nous sommes",["nous êtes","nous sont","nous suis"]],
+["Vous (avoir) au présent :","vous avez",["vous avons","vous ont","vous as"]],
+["Elle (prendre) au présent :","elle prend",["elle prends","elle prenons","elle prennent"]],
+["Tu (aller) au présent :","tu vas",["tu va","tu allons","tu vont"]],
+["Ils (faire) au présent :","ils font",["ils fais","ils faisons","ils fait"]],
+["Je (finir) au présent :","je finis",["je fini","je finissons","je finissent"]],
+["Nous (être) au futur :","nous serons",["nous sommes","nous étions","nous serez"]],
+["Demain, elle (aller) à l'école :","elle ira",["elle va","elle allait","elle est allée"]],
+["Hier, nous (jouer) au ballon :","nous avons joué",["nous jouerons","nous jouons","nous jouait"]],
+["Tu (faire) au présent :","tu fais",["tu fait","tu font","tu faisons"]],
+["Elles (chanter) au présent :","elles chantent",["elles chante","elles chantons","elles chantez"]],
+["Vous (prendre) au présent :","vous prenez",["vous prend","vous prenons","vous prennent"]],
+["Il (être) au futur :","il sera",["il est","il était","il seront"]],
+["Quel temps exprime une action qui se passe maintenant ?","le présent",["le futur","le passé","l'infinitif"]]
+],
+ortho: [
+["Maman ___ du marché.","vient",["viens","viennent","vientt"]],
+["Il va ___ la maison.","à",["a","as","ah"]],
+["Les enfants ___ à l'école.","sont",["son","sons","sontt"]],
+["Paul ___ un vélo.","a",["à","as","ah"]],
+["Le chat ___ dans la cour.","est",["et","ai","es"]],
+["Awa ___ Koffi jouent.","et",["est","ai","é"]],
+["___ garçons courent.","Les",["L'est","La","Le"]],
+["Elle porte ___ robe.","sa",["ça","ses","ce"]],
+["Les élèves ___ leurs cahiers.","ont",["on","ons","on't"]],
+["___ va au marché.","On",["Ont","Mon","Son"]],
+["Il ___ prépare rapidement.","se",["ce","ses","sa"]],
+["___ matin, il fait frais.","Ce",["Se","Ces","Ses"]],
+["Les ___ sont mûres.","mangues",["mangue","mangueses","mangue's"]],
+["Le bébé ___ doucement.","dort",["dors","dorent","dore"]],
+["J'écris avec un ___.","crayon",["crayons","crayonx","crayonne"]]
+],
+plur: [
+["Le pluriel de « un nez » :","des nez",["des nezs","des nexs","des nezes"]],
+["Le pluriel de « un bateau » :","des bateaux",["des bateaus","des bateau","des bateauses"]],
+["Le pluriel de « un travail » :","des travaux",["des travails","des travaus","des travaille"]],
+["Le pluriel de « un œil » :","des yeux",["des œils","des œil","des oeiles"]],
+["Le pluriel de « une maison » :","des maisons",["des maison","des maisones","des maisonx"]],
+["Le pluriel de « un jeu » :","des jeux",["des jeus","des jeu","des jeues"]],
+["Le pluriel de « un tuyau » :","des tuyaux",["des tuyaux","des tuyaux","des tuyau"]],
+["Le singulier de « des chevaux » :","un cheval",["un chevaux","une cheval","un chevals"]],
+["Le singulier de « des fleurs » :","une fleur",["un fleurs","une fleurs","des fleur"]],
+["Quelle phrase est correcte ?","Les oiseaux volent.",["Les oiseau volent.","Les oiseaux vole.","L'oiseaux volent."]],
+["Le pluriel de « un morceau » :","des morceaux",["des morceau","des morceaus","des morceaues"]],
+["Le pluriel de « un cadeau » :","des cadeaux",["des cadeaus","des cadeau","des cadeaues"]],
+["Le pluriel de « une souris » :","des souris",["des souries","des souriss","des sourisx"]],
+["Le pluriel de « un nez » garde…","la même forme",["un x","un s","un e"]],
+["Le pluriel de « un enfant » :","des enfants",["des enfant","des enfantes","des enfantx"]]
+],
+sens: [
+["Un synonyme de « heureux » :","content",["triste","fâché","fatigué"]],
+["Le contraire de « propre » :","sale",["net","beau","rangé"]],
+["Le contraire de « commencer » :","terminer",["débuter","ouvrir","continuer"]],
+["Un synonyme de « maison » :","habitation",["route","jardin","école"]],
+["Le contraire de « facile » :","difficile",["simple","léger","rapide"]],
+["Un synonyme de « parler » :","discuter",["dormir","marcher","manger"]],
+["Le contraire de « tôt » :","tard",["vite","hier","matin"]],
+["Un synonyme de « regarder » :","observer",["cacher","oublier","écouter"]],
+["Le contraire de « plein » :","vide",["rempli","entier","large"]],
+["Un synonyme de « courageux » :","brave",["peureux","faible","lent"]],
+["Le contraire de « ancien » :","nouveau",["vieux","passé","usé"]],
+["Un synonyme de « terminer » :","achever",["commencer","ouvrir","préparer"]],
+["Le contraire de « silencieux » :","bruyant",["calme","muet","doux"]],
+["Un synonyme de « beau » :","joli",["laid","sale","méchant"]],
+["Le contraire de « monter » :","descendre",["grimper","élever","avancer"]]
+],
+sci: [
+["Quel organe permet de voir ?","les yeux",["les oreilles","le nez","la langue"]],
+["Quel organe permet d'entendre ?","les oreilles",["les yeux","les mains","les pieds"]],
+["Quel aliment vient du lait ?","le fromage",["le riz","la banane","le poisson"]],
+["De quoi une plante a-t-elle besoin pour grandir ?","d'eau, d'air et de lumière",["de plastique","de pétrole","de sable seulement"]],
+["Quel animal pond des œufs ?","la poule",["la chèvre","le chien","le chat"]],
+["Quel état de l'eau est la vapeur ?","gazeux",["solide","liquide","dur"]],
+["La glace est de l'eau à l'état…","solide",["liquide","gazeux","chaud"]],
+["Quel astre éclaire la Terre le jour ?","le Soleil",["la Lune","Mars","une étoile filante"]],
+["Quel moyen protège contre certaines maladies ?","la vaccination",["les sucreries","le manque de sommeil","la saleté"]],
+["Pourquoi faut-il se brosser les dents ?","pour les garder propres",["pour les colorer","pour les user","pour les cacher"]],
+["Quel animal vit dans l'eau et respire avec des branchies ?","le poisson",["le mouton","la poule","le cheval"]],
+["Quelle partie du corps permet de marcher ?","les jambes",["les oreilles","les cheveux","les dents"]],
+["Quel déchet peut être recyclé ?","une bouteille en plastique",["une fumée","une odeur","un bruit"]],
+["L'eau potable est une eau que l'on peut…","boire sans danger",["peindre","brûler","salir"]],
+["Quel phénomène apporte la pluie ?","les précipitations",["le tremblement","le vent sec","la poussière"]]
+],
+edhc: [
+["Que doit-on faire avant de traverser la route ?","regarder des deux côtés",["courir sans regarder","jouer sur la route","fermer les yeux"]],
+["Comment saluer poliment un adulte ?","dire bonjour",["crier","se moquer","tourner le dos"]],
+["Que signifie respecter les autres ?","accepter leur dignité et leurs différences",["les insulter","les exclure","les frapper"]],
+["Que faut-il faire lorsqu'on trouve un objet perdu ?","le remettre à un adulte responsable",["le garder en secret","le jeter","le cacher"]],
+["Quel comportement protège l'environnement ?","planter des arbres",["brûler les déchets partout","couper tous les arbres","salir les rues"]],
+["À l'école, on doit…","écouter et participer",["déranger la classe","déchirer les livres","se battre"]],
+["Quel document officiel permet d'identifier une personne ?","la carte nationale d'identité",["un cahier","un ticket de bus","une affiche"]],
+["La devise de la Côte d'Ivoire est…","Union – Discipline – Travail",["Paix – Force – Joie","Liberté – Égalité – Fraternité","Travail – Santé – École"]],
+["Quel est l'hymne national ivoirien ?","L'Abidjanaise",["La Marseillaise","La Téranga","Nkosi Sikelel' iAfrika"]],
+["Que faut-il faire en cas d'incendie à l'école ?","alerter un adulte et évacuer calmement",["se cacher seul","retourner chercher ses affaires","jouer avec le feu"]],
+["Pourquoi respecter les règles de la classe ?","pour bien vivre et apprendre ensemble",["pour punir les amis","pour perdre du temps","pour éviter de travailler"]],
+["Quel geste montre la solidarité ?","aider un camarade en difficulté",["se moquer de lui","l'abandonner","lui prendre ses affaires"]],
+["Que faut-il faire après avoir utilisé les toilettes ?","se laver les mains",["essuyer ses mains au mur","ne rien faire","toucher les aliments"]],
+["Quel est le drapeau de la Côte d'Ivoire ?","orange, blanc et vert en bandes verticales",["vert, blanc et orange horizontales","bleu, blanc, rouge","rouge, jaune, vert"]],
+["Quel jour célèbre-t-on l'indépendance ivoirienne ?","le 7 août",["le 1er janvier","le 25 décembre","le 1er mai"]]
+],
+geo: [
+["Quelle est la capitale politique de la Côte d'Ivoire ?","Yamoussoukro",["Abidjan","Man","Daloa"]],
+["Quel pays se trouve à l'ouest de la Côte d'Ivoire ?","le Libéria",["le Ghana","le Burkina Faso","le Togo"]],
+["Quel pays se trouve à l'est de la Côte d'Ivoire ?","le Ghana",["le Libéria","la Guinée","le Mali"]],
+["Quel pays se trouve au nord de la Côte d'Ivoire ?","le Burkina Faso",["le Ghana","le Libéria","le Bénin"]],
+["Quelle mer borde le sud de la Côte d'Ivoire ?","le golfe de Guinée",["la mer Méditerranée","la mer Rouge","la mer Noire"]],
+["Dans quelle direction le soleil se lève-t-il ?","à l'est",["à l'ouest","au nord","au sud"]],
+["Sur une carte, le sud se trouve généralement…","en bas",["en haut","à gauche","à droite"]],
+["Combien de points cardinaux principaux existe-t-il ?","4",["2","3","8"]],
+["Quel est le plus long fleuve de Côte d'Ivoire ?","le Bandama",["le Nil","la Comoé","la Seine"]],
+["Quelle ville est connue comme capitale économique ?","Abidjan",["Yamoussoukro","Ferkessédougou","Bondoukou"]],
+["Quel océan se trouve à l'ouest de l'Afrique ?","l'océan Atlantique",["l'océan Indien","l'océan Pacifique","l'océan Arctique"]],
+["Quel outil permet de représenter un territoire ?","une carte",["une balance","un thermomètre","une horloge"]],
+["Quelle direction est opposée à l'est ?","l'ouest",["le nord","le sud","le centre"]],
+["Quel pays voisin est au nord-ouest de la Côte d'Ivoire ?","la Guinée",["le Ghana","le Togo","le Bénin"]],
+["Quelle est la capitale du Ghana ?","Accra",["Lomé","Bamako","Conakry"]]
+]
+};
+for (const t of T) if (EXTRA[t.id] && t.b) t.b.push(...EXTRA[t.id]);
+
+const S={m:{t:"Mathématiques",e:"🔢",c:"var(--or)",d:"Calcul, nombres, monnaie, géométrie, mesures"},f:{t:"Français",e:"✏️",c:"var(--gr)",d:"Grammaire, conjugaison, orthographe, vocabulaire"},v:{t:"Éveil",e:"🌍",c:"var(--bl)",d:"Sciences, vivre ensemble, Côte d’Ivoire"}};
+
+let prog={};try{prog=JSON.parse(localStorage.getItem("mimi-ce2")||"{}")}catch(e){}
+let stats={attempts:0,answers:0,correct:0,byTopic:{}};
+try{stats=Object.assign(stats,JSON.parse(localStorage.getItem("mimi-ce2-stats-v1")||"{}"))}catch(e){}
+const save=()=>{try{localStorage.setItem("mimi-ce2",JSON.stringify(prog));localStorage.setItem("mimi-ce2-stats-v1",JSON.stringify(stats))}catch(e){}};
+const star=n=>"★".repeat(n)+"☆".repeat(3-n);
+let cur,qs,i,score,cs="m";
+
+function say(t){try{const s=window.speechSynthesis;if(!s)return;s.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="fr-FR";u.rate=.95;u.pitch=1.2;const vs=s.getVoices().filter(v=>/^fr/i.test(v.lang));const v=vs.find(v=>/female|femme|amelie|audrey|marie|google/i.test(v.name))||vs[0];if(v)u.voice=v;s.speak(u)}catch(e){}}
+function home(){
+ const tot=Object.values(prog).reduce((a,b)=>a+b,0);
+ const d=new Date().toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"long"});
+ const rate=stats.answers?Math.round(stats.correct/stats.answers*100):0;
+ const done=Object.keys(prog).length;
+ $.innerHTML=`<header class="hero"><div class="hero-top"><span class="mini-logo">M</span><span class="tag">ESPACE APPRENANT · CE2</span></div><p class="date">${d[0].toUpperCase()+d.slice(1)}</p><h1>Le cahier de Mimi</h1><p class="sub">Apprendre, s'entraîner et progresser chaque jour !</p><div class="hero-bottom"><span class="stars">⭐ ${tot} étoiles</span><span class="hero-note">Continue tes efforts !</span></div></header>
+ <section class="dash"><div class="dash-head"><div><small>MON TABLEAU DE BORD</small><h2>Mes progrès</h2></div><span class="dash-icon">🏆</span></div>
+ <div class="stats-grid"><article class="stat"><span>📚</span><b>${stats.attempts}</b><small>Séries terminées</small></article><article class="stat"><span>✅</span><b>${stats.correct}</b><small>Bonnes réponses</small></article><article class="stat"><span>🎯</span><b>${rate}%</b><small>Réussite</small></article><article class="stat"><span>🌟</span><b>${done}/${T.length}</b><small>Thèmes récompensés</small></article></div>
+ <div class="overall"><div><b>Ma collection d'étoiles</b><strong>${tot} / ${T.length*3}</strong></div><div class="bar"><i style="--c:#f59e0b;width:${Math.min(100,tot/(T.length*3)*100)}%"></i></div></div></section>
+ <div class="section-title"><div><small>À TOI DE JOUER</small><h2>Choisis ta matière</h2></div><span>👇</span></div>
+ <div class="list">${Object.entries(S).map(([k,v])=>{const n=T.filter(t=>t.s==k).length;return `<button class="big subject-${k}" style="--c:${v.c}" data-a="subj" data-v="${k}"><span class="em">${v.e}</span><b>${v.t}</b><small>${v.d}</small><span class="subject-count">${n} thèmes à explorer →</span></button>`}).join("")}</div>
+ <footer class="app-footer">Mimi · Exercices CE2 <span>Conçu pour apprendre en s'amusant</span></footer>`;
+}
+function subj(s){
+ cs=s;const v=S[s];
+ $.innerHTML=`<button class="back" data-a="home">‹ Retour</button><h1>${v.e} ${v.t}</h1><p class="sub">Choisis un exercice. 10 questions, vise 3 étoiles !</p><div class="grid">${T.filter(t=>t.s==s).map(t=>`<button class="th" style="--c:${v.c}" data-a="start" data-v="${t.id}"><span>${t.e}</span><b>${t.t}</b><i aria-label="${prog[t.id]||0} étoiles sur 3">${star(prog[t.id]||0)}</i></button>`).join("")}</div>`;
+}
+function start(id){
+ cur=T.find(t=>t.id==id);i=0;score=0;
+ if(cur.b)qs=sh(cur.b).slice(0,10).map(conv);
+ else{qs=[];const seen=new Set();let g=0;while(qs.length<10&&g++<80){const q=cur.g();if(!seen.has(q.q)){seen.add(q.q);qs.push(q)}}}
+ ask();
+}
+function ask(){
+ const q=qs[i],n=qs.length;
+ $.innerHTML=`<button class="back" data-a="subj" data-v="${cur.s}">‹ Quitter</button><div class="bar" style="--c:${S[cur.s].c}"><i style="width:${i/n*100}%"></i></div><p class="cnt">${cur.t} : question ${i+1} sur ${n}</p><section class="card"><h2>${q.q}</h2><div class="ch">${q.c.map((c,k)=>`<button data-a="ans" data-v="${k}">${c}</button>`).join("")}</div><div id="fb" role="status" aria-live="polite"></div></section>`;
+}
+function ans(k){
+ const q=qs[i],bs=[...document.querySelectorAll(".ch button")],good=q.c[k]==q.ok;
+  stats.answers++;if(good)stats.correct++;save();
+ bs.forEach((b,j)=>{b.disabled=true;if(q.c[j]==q.ok){b.classList.add("ok");b.textContent="✓ "+b.textContent}else if(j==k){b.classList.add("ko");b.textContent="✗ "+b.textContent}});
+ let m="";if(good){score++;m=pick(["Super Mimi !","Bravo Mimi !","Excellent Mimi !","Bien joué Mimi !","Magnifique Mimi !"]);say(m)}
+ const last=i==qs.length-1;
+ document.getElementById("fb").innerHTML=(good?m:`Pas tout à fait. La bonne réponse : ${q.ok}`)+`<br><button class="go" style="--c:${S[cur.s].c}" data-a="next">${last?"Voir mon résultat":"Question suivante"}</button>`;
+ document.querySelector(".go").focus();
+}
+function end(){
+ const n=qs.length,r=score/n,st=r>=.9?3:r>=.7?2:r>=.5?1:0;
+ stats.attempts++;if(!stats.byTopic[cur.id])stats.byTopic[cur.id]=0;stats.byTopic[cur.id]=Math.max(stats.byTopic[cur.id],st);if(st>(prog[cur.id]||0)){prog[cur.id]=st}save()
+ const msg=st==3?"Magnifique, Mimi ! Tu maîtrises cet exercice.":st==2?"Très bien ! Encore un essai pour les 3 étoiles ?":st==1?"C’est un bon début. Recommence pour progresser !":"Courage, Mimi ! Chaque essai t’aide à apprendre.";
+ $.innerHTML=`<section class="card res"><h2>${score} sur ${n}</h2><p class="st" aria-label="${st} étoiles sur 3">${star(st)}</p><p>${msg}</p><div class="row"><button class="go" style="--c:${S[cur.s].c}" data-a="start" data-v="${cur.id}">Rejouer</button><button class="go alt" data-a="subj" data-v="${cur.s}">Autres exercices</button></div></section>`;
+}
+$.addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(!b||b.disabled)return;const a=b.dataset.a,v=b.dataset.v;
+ if(a=="home")home();else if(a=="subj")subj(v);else if(a=="start")start(v);else if(a=="ans")ans(+v);else if(a=="next"){i++;i<qs.length?ask():end()}
+ window.scrollTo(0,0)});
+home();
+if("serviceWorker" in navigator){
+ window.addEventListener("load",()=>navigator.serviceWorker.register("./service-worker.js").catch(()=>{}));
+}
+</script>
+</body>
+</html>

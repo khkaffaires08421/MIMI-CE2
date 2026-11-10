@@ -1,0 +1,16 @@
+{
+  "id": "./",
+  "name": "Mimi – Exercices CE2",
+  "short_name": "Mimi CE2",
+  "description": "Exercices interactifs de CE2 : mathématiques, français et éveil.",
+  "lang": "fr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#fdfdf8",
+  "theme_color": "#173b79",
+  "categories": [
+    "education"
+  ]
+}
